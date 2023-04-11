@@ -11,7 +11,7 @@ API_PARAMS = {
 pipedrive_api_endpoint = "https://api.pipedrive.com/v1"
 
 # Read the CSV file into a pandas DataFrame
-df = pd.read_csv('people-14375401-85.csv', low_memory=False)
+df = pd.read_csv('pipedrive_export.csv', low_memory=False)
 
 # Initialize an empty list to store duplicates
 all_duplicates = []
@@ -27,8 +27,8 @@ duplicates = pd.Series(all_emails_list).duplicated()
 # get a list of the duplicate values
 duplicates_list = pd.Series(all_emails_list)[duplicates].tolist()
 
-print(duplicates_list)
-print(len(duplicates_list))
+# print(duplicates_list)
+# print(len(duplicates_list))
 
 
 def get_person(email_address):
@@ -96,7 +96,7 @@ for person in duplicates_list:
     data = get_person(person)
 
     id_list = create_id_list(data)
-    print(id_list)
+    print(f'The ids of this person are: {id_list}.\nThere is {len(id_list)} person under this email adress in Pipedrive.')
 
     in_email_list = None
     if len(id_list) != 1:
@@ -112,4 +112,5 @@ for person in duplicates_list:
         if len(id_list) >= 2:
             merge_persons(id_list[0], id_list[1])
             print(f"Merged {id_list[0]} with {id_list[1]}.")
-
+    else:
+        print(f'No need to merge duplicates for person {id_list}. There are no duplicates.')
